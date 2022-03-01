@@ -36,10 +36,10 @@ func TestAdd(t *testing.T) {
 		{-0.1, -0.1, -0.2},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Add(%v, %v)", tc.a, tc.b), func(t *testing.T) {
+		t.Run(fmt.Sprintf("Add(%f, %f)", tc.a, tc.b), func(t *testing.T) {
 			got := calculator.Add(tc.a, tc.b)
 			if !withinTolerance(got, tc.want, 1e-12) {
-				t.Errorf("got %v, want %v", got, tc.want)
+				t.Errorf("got %f, want %f", got, tc.want)
 			}
 		})
 	}
@@ -60,10 +60,10 @@ func TestSubtract(t *testing.T) {
 		{-1.1, -0.2, -0.9},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Subtract(%v. %v)", tc.a, tc.b), func(t *testing.T) {
+		t.Run(fmt.Sprintf("Subtract(%f, %f)", tc.a, tc.b), func(t *testing.T) {
 			got := calculator.Subtract(tc.a, tc.b)
 			if !withinTolerance(got, tc.want, 1e-12) {
-				t.Errorf("got %v, want %v", got, tc.want)
+				t.Errorf("got %f, want %f", got, tc.want)
 			}
 		})
 	}
@@ -84,12 +84,43 @@ func TestMultiply(t *testing.T) {
 		{-1, 0.1, -0.1},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Multiply(%v, %v)", tc.a, tc.b), func(t *testing.T) {
+		t.Run(fmt.Sprintf("Multiply(%f, %f)", tc.a, tc.b), func(t *testing.T) {
 			got := calculator.Multiply(tc.a, tc.b)
 			if !withinTolerance(got, tc.want, 1e-12) {
-				t.Errorf("want %f, got %f", tc.want, got)
+				t.Errorf("got %f, want %f", got, tc.want)
 			}
 
+		})
+	}
+}
+
+func TestDivide(t *testing.T) {
+	tests := []struct {
+		a           float64
+		b           float64
+		want        float64
+		errExpected bool
+	}{
+		{1, 1, 1, false},
+		{0, 1, 0, false},
+		{0.1, 1, 0.1, false},
+		{0, 0.1, 0, false},
+		{-1, 1, -1, false},
+		{-1, -1, 1, false},
+		{-0.1, 1, -0.1, false},
+		{1, 0, 0, true},
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("Divide(%f, %f)", tc.a, tc.b), func(t *testing.T) {
+			got, err := calculator.Divide(tc.a, tc.b)
+			if (tc.errExpected && err == nil) || (!tc.errExpected && err != nil) {
+				t.Errorf("Improper error condition, err.Expected=%t, got: '%s'", tc.errExpected, err)
+			}
+			if err == nil {
+				if !withinTolerance(got, tc.want, 1e-12) {
+					t.Errorf("got %f, want %f", got, tc.want)
+				}
+			}
 		})
 	}
 }
