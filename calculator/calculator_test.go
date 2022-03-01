@@ -4,6 +4,7 @@ import (
 	"calculator"
 	"fmt"
 	"math"
+	"math/rand"
 	"testing"
 )
 
@@ -40,6 +41,20 @@ func TestAdd(t *testing.T) {
 			got := calculator.Add(tc.a, tc.b)
 			if !withinTolerance(got, tc.want, 1e-12) {
 				t.Errorf("got %f, want %f", got, tc.want)
+			}
+		})
+	}
+}
+
+func TestAddRand(t *testing.T) {
+	for i := 0; i < 100; i++ {
+		a := rand.Float64()
+		b := rand.Float64()
+		want := a + b
+		t.Run(fmt.Sprintf("AddRand(%f, %f)", a, b), func(t *testing.T) {
+			got := calculator.Add(a, b)
+			if !withinTolerance(got, want, 1e-12) {
+				t.Errorf("got %f, want %f", got, want)
 			}
 		})
 	}
