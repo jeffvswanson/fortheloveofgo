@@ -123,7 +123,7 @@ func TestDivide(t *testing.T) {
 		{-1, 1, -1, false},
 		{-1, -1, 1, false},
 		{-0.1, 1, -0.1, false},
-		{1, 0, 0, true},
+		{1, 0, 0, true}, // Division by 0
 	}
 	for _, tc := range tests {
 		t.Run(fmt.Sprintf("Divide(%f, %f)", tc.a, tc.b), func(t *testing.T) {
@@ -133,6 +133,33 @@ func TestDivide(t *testing.T) {
 			}
 			if err == nil {
 				if !withinTolerance(got, tc.want, 1e-12) {
+					t.Errorf("got %f, want %f", got, tc.want)
+				}
+			}
+		})
+	}
+}
+
+func TestSqrt(t *testing.T) {
+	tests := []struct {
+		a           float64
+		want        float64
+		errExpected bool
+	}{
+		{0, 0, false},
+		{1, 1, false},
+		{4, 2, false},
+		{2, 1.414, false},
+		{-1, -1, true}, // Imaginary number
+	}
+	for _, tc := range tests {
+		t.Run(fmt.Sprintf("Sqrt(%f)", tc.a), func(t *testing.T) {
+			got, err := calculator.Sqrt(tc.a)
+			if (tc.errExpected && err == nil) || (!tc.errExpected && err != nil) {
+				t.Errorf("Improper error condidion, errExpected=%t, got: '%s'", tc.errExpected, err)
+			}
+			if err == nil {
+				if !withinTolerance(got, tc.want, 1e-3) {
 					t.Errorf("got %f, want %f", got, tc.want)
 				}
 			}
