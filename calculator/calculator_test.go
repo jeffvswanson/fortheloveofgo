@@ -22,23 +22,25 @@ func withinTolerance(a, b, e float64) bool {
 
 func TestAdd(t *testing.T) {
 	tests := []struct {
-		a    float64
-		b    float64
+		a    []float64
 		want float64
 	}{
-		{1, 1, 2},
-		{1, 0, 1},
-		{0, 0, 0},
-		{-1, 1, 0},
-		{-1, 0, -1},
-		{-1, -1, -2},
-		{0.1, 0.9, 1},
-		{-0.1, -0.9, -1},
-		{-0.1, -0.1, -0.2},
+		{nil, 0},
+		{[]float64{0}, 0},
+		{[]float64{1, 1}, 2},
+		{[]float64{1, 0}, 1},
+		{[]float64{0, 0}, 0},
+		{[]float64{-1, 1}, 0},
+		{[]float64{-1, 0}, -1},
+		{[]float64{-1, -1}, -2},
+		{[]float64{0.1, 0.9}, 1},
+		{[]float64{-0.1, -0.9}, -1},
+		{[]float64{-0.1, -0.1}, -0.2},
+		{[]float64{1, 2, 3}, 6},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Add(%f, %f)", tc.a, tc.b), func(t *testing.T) {
-			got := calculator.Add(tc.a, tc.b)
+		t.Run(fmt.Sprintf("Add(%v)", tc.a), func(t *testing.T) {
+			got := calculator.Add(tc.a...)
 			if !withinTolerance(got, tc.want, 1e-12) {
 				t.Errorf("got %f, want %f", got, tc.want)
 			}
@@ -62,21 +64,23 @@ func TestAddRand(t *testing.T) {
 
 func TestSubtract(t *testing.T) {
 	tests := []struct {
-		a    float64
-		b    float64
+		a    []float64
 		want float64
 	}{
-		{1, 1, 0},
-		{1, 0, 1},
-		{0, 1, -1},
-		{0, 0, 0},
-		{-1, -1, 0},
-		{0.1, 0.1, 0},
-		{-1.1, -0.2, -0.9},
+		{nil, 0},
+		{[]float64{0}, 0},
+		{[]float64{1, 1}, 0},
+		{[]float64{1, 0}, 1},
+		{[]float64{0, 1}, -1},
+		{[]float64{0, 0}, 0},
+		{[]float64{-1, -1}, 0},
+		{[]float64{0.1, 0.1}, 0},
+		{[]float64{-1.1, -0.2}, -0.9},
+		{[]float64{-1, -2, -3}, 4},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Subtract(%f, %f)", tc.a, tc.b), func(t *testing.T) {
-			got := calculator.Subtract(tc.a, tc.b)
+		t.Run(fmt.Sprintf("Subtract(%v)", tc.a), func(t *testing.T) {
+			got := calculator.Subtract(tc.a...)
 			if !withinTolerance(got, tc.want, 1e-12) {
 				t.Errorf("got %f, want %f", got, tc.want)
 			}
@@ -86,21 +90,25 @@ func TestSubtract(t *testing.T) {
 
 func TestMultiply(t *testing.T) {
 	tests := []struct {
-		a    float64
-		b    float64
+		a    []float64
 		want float64
 	}{
-		{1, 1, 1},
-		{0, 1, 0},
-		{1, 0, 0},
-		{1, 0.1, 0.1},
-		{-1, 1, -1},
-		{-1, -1, 1},
-		{-1, 0.1, -0.1},
+		{nil, 0},
+		{[]float64{0}, 0},
+		{[]float64{1}, 1},
+		{[]float64{2}, 2},
+		{[]float64{1, 1}, 1},
+		{[]float64{0, 1}, 0},
+		{[]float64{1, 0}, 0},
+		{[]float64{1, 0.1}, 0.1},
+		{[]float64{-1, 1}, -1},
+		{[]float64{-1, -1}, 1},
+		{[]float64{-1, 0.1}, -0.1},
+		{[]float64{10, 10, 10}, 1000},
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Multiply(%f, %f)", tc.a, tc.b), func(t *testing.T) {
-			got := calculator.Multiply(tc.a, tc.b)
+		t.Run(fmt.Sprintf("Multiply(%v)", tc.a), func(t *testing.T) {
+			got := calculator.Multiply(tc.a...)
 			if !withinTolerance(got, tc.want, 1e-12) {
 				t.Errorf("got %f, want %f", got, tc.want)
 			}
@@ -111,23 +119,26 @@ func TestMultiply(t *testing.T) {
 
 func TestDivide(t *testing.T) {
 	tests := []struct {
-		a           float64
-		b           float64
+		a           []float64
 		want        float64
 		errExpected bool
 	}{
-		{1, 1, 1, false},
-		{0, 1, 0, false},
-		{0.1, 1, 0.1, false},
-		{0, 0.1, 0, false},
-		{-1, 1, -1, false},
-		{-1, -1, 1, false},
-		{-0.1, 1, -0.1, false},
-		{1, 0, 0, true}, // Division by 0
+		{nil, 0, false},
+		{[]float64{1}, 1, true}, // Need at least two values for division
+		{[]float64{1, 1}, 1, false},
+		{[]float64{0, 1}, 0, false},
+		{[]float64{0.1, 1}, 0.1, false},
+		{[]float64{0, 0.1}, 0, false},
+		{[]float64{-1, 1}, -1, false},
+		{[]float64{-1, -1}, 1, false},
+		{[]float64{-0.1, 1}, -0.1, false},
+		{[]float64{1000, 10, 10}, 10, false},
+		{[]float64{1, 0}, 0, true},    // Division by 0
+		{[]float64{4, 2, 0}, 0, true}, // Division by 0
 	}
 	for _, tc := range tests {
-		t.Run(fmt.Sprintf("Divide(%f, %f)", tc.a, tc.b), func(t *testing.T) {
-			got, err := calculator.Divide(tc.a, tc.b)
+		t.Run(fmt.Sprintf("Divide(%v)", tc.a), func(t *testing.T) {
+			got, err := calculator.Divide(tc.a...)
 			if (tc.errExpected && err == nil) || (!tc.errExpected && err != nil) {
 				t.Errorf("Improper error condition, err.Expected=%t, got: '%s'", tc.errExpected, err)
 			}
