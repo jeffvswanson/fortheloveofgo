@@ -1,6 +1,4 @@
-package main
-
-import "fmt"
+package book
 
 // Book represents information about a book.
 type Book struct {
@@ -11,17 +9,4 @@ type Book struct {
 	Price           int // Price in cents
 	SeriesOrder     int
 	DiscountPercent uint // 10 represents a 10% discount
-}
-
-func main() {
-	b := Book{
-		Title:           "For the Love of Go",
-		Author:          "Jeff Swanson",
-		Copies:          1,
-		Edition:         2,
-		Price:           100,
-		SeriesOrder:     1,
-		DiscountPercent: 0,
-	}
-	fmt.Printf("%+v\n", b)
 }
