@@ -1,7 +1,7 @@
 package main
 
 import (
-	"book"
+	"bookstore/book"
 	"fmt"
 )
 
@@ -13,7 +13,8 @@ func main() {
 		Edition:         2,
 		Price:           100,
 		SeriesOrder:     1,
-		DiscountPercent: 0,
+		DiscountPercent: 5,
 	}
 	fmt.Printf("%+v\n", b)
+	fmt.Printf("Price after discount: %d\n", b.NetPrice())
 }

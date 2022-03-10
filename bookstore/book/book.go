@@ -10,3 +10,8 @@ type Book struct {
 	SeriesOrder     int
 	DiscountPercent uint // 10 represents a 10% discount
 }
+
+// NetPrice calculates the prices of a book given its DiscountPercent
+func (b Book) NetPrice() int {
+	return b.Price - ((b.Price * int(b.DiscountPercent)) / 100)
+}
