@@ -2,13 +2,14 @@ package book
 
 // Book represents information about a book.
 type Book struct {
-	Title           string
 	Author          []string
 	Copies          int
-	Edition         int
-	Price           int // Price in cents
-	SeriesOrder     int
 	DiscountPercent uint // 10 represents a 10% discount
+	Edition         int
+	Featured        bool // Book is selected for Read of the Month
+	Price           int  // Price in cents
+	SeriesOrder     int
+	Title           string
 }
 
 // NetPrice calculates the prices of a book given its DiscountPercent
