@@ -3,7 +3,7 @@ package book
 // Book represents information about a book.
 type Book struct {
 	Title           string
-	Author          string
+	Author          []string
 	Copies          int
 	Edition         int
 	Price           int // Price in cents
