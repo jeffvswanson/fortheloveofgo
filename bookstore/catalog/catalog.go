@@ -20,3 +20,8 @@ func (c Catalog) FeaturedBooks() Catalog {
 	}
 	return f
 }
+
+// Returns the Catalog
+func (c Catalog) GetAllBooks() Catalog {
+	return c
+}
