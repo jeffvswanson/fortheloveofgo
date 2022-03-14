@@ -1,8 +1,6 @@
 package book
 
-import (
-	"testing"
-)
+import "testing"
 
 func TestBook(t *testing.T) {
 	_ = Book{
